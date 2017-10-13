@@ -1,0 +1,123 @@
+<script>
+var app = new Vue
+({
+    el:"#app",
+    data:
+    {
+        admin_name:"<%= current_user.email %>",
+        get_votes_count: 0,
+        vote_info_src : {},
+        ajax_done : false,
+        ajax_failed : false
+    },
+    methods:
+    {
+        votes_counter:function(x)
+        {
+            var same_as_vote_id = app.vote_info_src.voter_votes.filter(function(word)
+            {
+                return word.vote_id == x;
+            });
+            return same_as_vote_id.length;
+        },
+        ajax_modal:function( input_id , input_name )
+        {
+            vote_info.reset_datas();
+            vote_info.launch( input_id , input_name );
+        }
+    },
+    mounted: function()
+    {
+        $.ajax
+        ({
+            url:"<%= admin_system_index_path %>",
+            dataType:"json",
+            success:function(e)
+            {
+                // console.log(e);
+                app.vote_info_src = e;
+                app.get_votes_count = app.vote_info_src.voter_votes.length;
+                app.ajax_done = true;
+            },
+            error:function( jqXHR, textStatus, errorThrown )
+            {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                app.ajax_failed = true;
+            }
+        });
+    }
+});
+
+var vote_info = new Vue
+({
+    el:"#vote_info",
+    data:
+    {
+        input_id : 0,
+        item_name : "",
+        ajax_done : false,
+        ajax_failed : false,
+        love_marginal : false,
+        voters_src : {}
+    },
+    methods:
+    {
+        launch:function( vi_input_id , vi_input_name )
+        {
+            vote_info.input_id = vi_input_id;
+            vote_info.item_name = vi_input_name;
+            $.ajax
+            ({
+                url: "<%= admin_system_index_path %>/" + vi_input_id,
+                dataType:"json",
+                success:function(e)
+                {
+                    // console.log(e);
+                    vote_info.voters_src = e;
+                    vote_info.ajax_done = true;
+                    vote_info.is_voter_empty( e.voter_info.length );
+                },
+                error:function( jqXHR, textStatus, errorThrown )
+                {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    vote_info.ajax_failed = true;
+                }
+            });
+        },
+        is_voter_empty:function( v )
+        {
+            if ( v == 0 ) { vote_info.love_marginal = true; }
+            else { vote_info.love_marginal = false; }
+        },
+        find_voter:function( fv )
+        {
+            var get_voter_name = vote_info.voters_src.voter_info.filter(function(word)
+            {
+                if ( word[0].id == fv ) { return word; }
+            });
+            return get_voter_name[0][0].account_name;
+        },
+        edit_method_url : function( vid )
+        {
+            return "/admin_system/" + vid + "/edit";
+        },
+        delete_method_url : function( vid )
+        {
+            return "/admin_system/" + vid;
+        },
+        reset_datas:function()
+        {
+            vote_info.input_id = 0;
+            vote_info.item_name = "";
+            vote_info.voters_src =  {};
+            vote_info.ajax_done = false;
+            vote_info.ajax_failed = false;
+            vote_info.love_marginal = false;
+        }
+    }
+});
+</script>

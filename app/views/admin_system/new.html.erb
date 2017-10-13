@@ -1,0 +1,8 @@
+<h1>新增選項</h1>
+<p>請填寫要增加的隊伍</p>
+<br />
+<%= form_for(@item, :url => { :action => "create" }) do |v| %>
+    <%= v.text_field :item, :required => true %>
+    <br />
+    <%= v.submit "提交隊名" %>
+<% end %>

@@ -1,0 +1,2 @@
+module AdminSystemHelper
+end

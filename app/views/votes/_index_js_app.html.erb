@@ -1,0 +1,36 @@
+<script>
+var vote_app = new Vue
+({
+    el: "#vote_app",
+    data:
+    {
+        xhr_src:[],
+        my_option:0
+    },
+    methods:
+    {
+        link_bind:function(bind_id)
+        {
+            return "/<%= controller_name %>/" + bind_id + "/upvote" ;
+        },
+        get_votes:function( item_id )
+        {
+            return item_id == vote_app.my_option;
+        }
+    },
+    mounted: function ()
+    {
+        $.ajax
+        ({
+            url:"<%= votes_path %>",
+            dataType:"json",
+            success:function(d)
+            {
+                vote_app.xhr_src = d.options;
+                if( d.myvote.length > 0 ){ vote_app.my_option = d.myvote[0].vote_id; }
+                $(".spinner").addClass("hide");
+            }
+        });
+    }
+});
+</script>

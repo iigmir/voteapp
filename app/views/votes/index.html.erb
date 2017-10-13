@@ -1,0 +1,18 @@
+<h1>您好！<%#= current_user.email %></h1>
+<h2>那一組表現得最好？</h2>
+<div id="vote_app">
+    <div class="spinner"></div>
+    <ul>
+        <li v-for="s in xhr_src">
+            <a v-bind:href="link_bind( s.id )" class="large button"
+            role="button" rel="nofollow" data-confirm="確定嗎？" data-method="post">
+                {{ s.item }}
+            </a>
+            <span class="label focus" v-if="get_votes(s.id)">所投對象</span>
+        </li>
+    </ul>
+</div>
+
+<div id="easteregg" hidden></div>
+
+<%= render "index_js_app" %>

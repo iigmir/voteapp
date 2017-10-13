@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charest="utf-8" />
+    <title>投票系統</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/kube/6.5.2/css/kube.min.css" />
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    
+    <% test = true %>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/kube/6.5.2/js/kube.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
+</head>
+<body>
+    <div id="container">
+    <%
+        error_class = alert ? " error" : ""
+        if notice || alert
+    %>
+        <div class="message <%= error_class %>" data-component="message">
+            <%= notice %>
+            <%= alert %>
+            <span class="close small"></span>
+        </div>
+        <% end %>
+        <%= yield %>
+        <%= render "layouts/footer" %>
+    </div>
+</body>
+</html>

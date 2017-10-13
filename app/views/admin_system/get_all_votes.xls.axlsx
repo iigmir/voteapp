@@ -1,0 +1,8 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Buttons") do |sheet|
+    sheet.add_row [ "投票流水號" , "投票者" , "投票隊伍" ,  "投票時間"]
+    @votes_xlsx.each do |b|
+        # sheet.add_row [b.vote_id, b.user_id, b.created_at ]
+        sheet.add_row [ b.id , User.find( b.user_id ).account_name , Vote.find( b.vote_id ).item , b.created_at]
+    end
+end

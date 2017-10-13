@@ -1,0 +1,84 @@
+<div id="app">
+    <h1>您好 {{ admin_name }}</h1>
+    <h2>管理後台</h2>
+    <hr />
+    <div class="message error" v-bind:class="{ hide : !ajax_failed }" data-component="message">
+        從伺服器讀取資料失敗了，請重新整理。
+    </div>
+    <div class="spinner" v-bind:class="{ hide : ajax_done }"></div>
+    <table class="bordered" v-bind:class="{ hide : !ajax_done }">
+        <thead>
+            <tr>
+                <th>隊伍名稱</th>
+                <th>目前票數</th>
+                <th>動作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="v in vote_info_src.vote_options">
+                <td>
+                    <a  href="#"
+                        data-component="modal" data-target="#vote_info"
+                        v-on:click="ajax_modal( v.id , v.item )">
+                        {{ v.item }}
+                    </a>
+                </td>
+                <td>
+                    {{ votes_counter( v.id ) }}
+                </td>
+                <td>
+                    <a v-bind:href="'/admin_system/' + v.id + '/edit'">修改</a>，
+                    或是<a v-bind:href="'/admin_system/' + v.id"
+                    data-confirm="確定嗎？" data-method="delete">刪除</a>。
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>總票數：</td>
+                <td> {{ get_votes_count }} </td>
+                <td>下載投票動向檔案（提供格式：
+                <%= link_to '.xls', get_all_votes_admin_system_index_path(format: "xls") %>
+                、
+                <%= link_to '.xlsx', get_all_votes_admin_system_index_path(format: "xlsx") %>
+                ）</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div id="vote_info" class="modal-box hide">
+    <div class="modal">
+        <span class="close"></span>
+        <div class="modal-header"> {{ item_name }} 的投票資訊</div>
+        <div class="modal-body">
+            <div class="message error" v-bind:class="{ hide : !ajax_failed }" data-component="message">
+                從伺服器讀取資料失敗了。試著關閉這個視窗後檢查網路，並重新開啟其他視窗看看。
+            </div>
+            <div class="spinner" v-bind:class="{ hide : ajax_done }"></div>
+            <div v-bind:class="{ hide : !ajax_done }">
+                <p v-bind:class="{ hide : !love_marginal }">沒有人投給這個隊伍。</p>
+                <table class="bordered" v-bind:class="{ hide : love_marginal }">
+                    <thead>
+                        <tr>
+                            <th>投票者編號</th>
+                            <th>投票者的投票時間</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="v in voters_src.votes">
+                            <td>
+                                {{ find_voter( v.user_id ) }}
+                            </td>
+                            <td>
+                                {{ v.created_at }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%= render "index_script" %>

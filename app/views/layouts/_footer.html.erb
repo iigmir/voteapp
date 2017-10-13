@@ -1,0 +1,13 @@
+    <footer class="breadcrumbs push-center">
+        <ul style="list-style:none;">
+            <li><a href="/">回首頁</a></li>
+        <% if user_signed_in? %>
+            <li><%= link_to"登出", destroy_user_session_path , method: :delete %></li>
+            <% if current_user.user_is_admin == true %>
+            <li><%= link_to "建立新的選項", new_admin_system_path %></li>
+            <% end %>
+        <% else %>
+            <li><%= link_to"登入",new_user_session_path %></li>
+        <% end %>
+        </ul>
+    </footer>

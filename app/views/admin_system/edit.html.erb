@@ -1,0 +1,12 @@
+    <h1>編輯選項</h1>
+<% if current_user.user_is_admin == true %>
+    <p>請填寫要編輯的隊伍</p>
+    <br />
+    <%= form_for(@vote, :url => { :action => "update" }) do |v| %>
+        <%= v.text_field :item, :required => true, :value => @vote.item %>
+        <br />
+        <%= v.submit "修正隊名" %>
+    <% end %>
+<% else %>
+    <p>很抱歉！您並沒有編輯選項的權限。</p>
+<% end %>
